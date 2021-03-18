@@ -6,7 +6,12 @@ export class Skier extends Entity {
   assetName = Constants.SKIER_DOWN;
 
   direction = Constants.SKIER_DIRECTIONS.DOWN;
+  directionBeforeJump = Constants.SKIER_DIRECTIONS.DOWN;
+
   speed = Constants.SKIER_STARTING_SPEED;
+  jumpDuration = 0;
+  skiMode = 'ski';
+  // isJumping = false;
 
   constructor(x, y) {
     super(x, y);
@@ -22,7 +27,44 @@ export class Skier extends Entity {
   }
 
   move() {
-    switch (this.direction) {
+    if (this.hasCrashed()) {
+      return;
+    }
+
+    if (this.skiMode === 'jump') {
+      return this.jump();
+    }
+
+    this.chooseDirection(this.direction);
+  }
+
+  initJump() {
+    if (this.skiMode !== 'jump') {
+      this.directionBeforeJump = this.direction;
+      this.direction = Constants.SKIER_DIRECTIONS.JUMP;
+      this.speed = Constants.SKIER_JUMP_SPEED;
+      this.skiMode = 'jump';
+    }
+  }
+
+  setSpeed(speed = Constants.SKIER_STARTING_SPEED) {
+    this.speed = speed;
+  }
+
+  jump() {
+    this.jumpDuration++;
+
+    if (this.jumpDuration >= Constants.SKIER_MAX_JUMP_DURATION) {
+      return this.stopJump();
+    }
+
+    this.direction = this.direction + 1;
+
+    this.chooseDirection(this.directionBeforeJump);
+  }
+
+  chooseDirection(direction) {
+    switch (direction) {
       case Constants.SKIER_DIRECTIONS.LEFT_DOWN:
         this.moveSkierLeftDown();
         break;
@@ -33,6 +75,26 @@ export class Skier extends Entity {
         this.moveSkierRightDown();
         break;
     }
+  }
+
+  stopJump() {
+    this.setSpeed();
+    this.jumpDuration = 0;
+
+    this.setDirection(this.directionBeforeJump);
+    this.skiMode = 'ski';
+  }
+
+  isJumping() {
+    return (
+      this.direction >= Constants.SKIER_DIRECTIONS.JUMP &&
+      this.jumpDuration <= Constants.SKIER_MAX_JUMP_DURATION &&
+      this.skiMode === 'jump'
+    );
+  }
+
+  hasCrashed() {
+    return this.direction === Constants.SKIER_DIRECTIONS.CRASH;
   }
 
   moveSkierLeft() {
@@ -62,7 +124,10 @@ export class Skier extends Entity {
   }
 
   turnLeft() {
-    if (this.direction === Constants.SKIER_DIRECTIONS.LEFT) {
+    if (
+      this.direction === Constants.SKIER_DIRECTIONS.LEFT ||
+      this.direction === Constants.SKIER_DIRECTIONS.CRASH
+    ) {
       this.moveSkierLeft();
     } else {
       this.setDirection(this.direction - 1);
@@ -113,6 +178,14 @@ export class Skier extends Entity {
     });
 
     if (collision) {
+      const collisionObject = collision.getAssetName();
+      if (
+        this.skiMode === 'jump' &&
+        (collisionObject === Constants.ROCK1 ||
+          collisionObject === Constants.ROCK2)
+      ) {
+        return;
+      }
       this.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
     }
   }

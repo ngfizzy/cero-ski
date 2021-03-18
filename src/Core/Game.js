@@ -1,20 +1,21 @@
-import * as Constants from "../Constants";
-import { AssetManager } from "./AssetManager";
-import { Canvas } from "./Canvas";
-import { Skier } from "../Entities/Skier";
-import { ObstacleManager } from "../Entities/Obstacles/ObstacleManager";
-import { Rect } from "./Utils";
+import * as Constants from '../Constants';
+import { AssetManager } from './AssetManager';
+import { Canvas } from './Canvas';
+import { Skier } from '../Entities/Skier';
+import { ObstacleManager } from '../Entities/Obstacles/ObstacleManager';
+import { Rect } from './Utils';
 
 export class Game {
   gameWindow = null;
 
   constructor() {
     this.assetManager = new AssetManager();
+
     this.canvas = new Canvas(Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
     this.skier = new Skier(0, 0);
     this.obstacleManager = new ObstacleManager();
 
-    document.addEventListener("keydown", this.handleKeyDown.bind(this));
+    document.addEventListener('keydown', this.handleKeyDown.bind(this));
   }
 
   init() {
@@ -41,7 +42,6 @@ export class Game {
     this.calculateGameWindow();
 
     this.obstacleManager.placeNewObstacle(this.gameWindow, previousGameWindow);
-
     this.skier.checkIfSkierHitObstacle(this.obstacleManager, this.assetManager);
   }
 
@@ -66,9 +66,12 @@ export class Game {
   }
 
   handleKeyDown(event) {
+    if (this.skier.direction >= Constants.SKIER_DIRECTIONS.JUMP_1) {
+      return null;
+    }
+
     switch (event.which) {
       case Constants.KEYS.LEFT:
-
         this.skier.turnLeft();
         event.preventDefault();
         break;
@@ -82,6 +85,10 @@ export class Game {
         break;
       case Constants.KEYS.DOWN:
         this.skier.turnDown();
+        event.preventDefault();
+        break;
+      case Constants.KEYS.JUMP:
+        this.skier.initJump();
         event.preventDefault();
         break;
     }
