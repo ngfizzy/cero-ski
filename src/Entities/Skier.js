@@ -10,8 +10,7 @@ export class Skier extends Entity {
 
   speed = Constants.SKIER_STARTING_SPEED;
   jumpDuration = 0;
-  skiMode = 'ski';
-  // isJumping = false;
+  mode = Constants.SKIER_MODES.SKI;
 
   constructor(x, y) {
     super(x, y);
@@ -31,7 +30,7 @@ export class Skier extends Entity {
       return;
     }
 
-    if (this.skiMode === 'jump') {
+    if (this.mode === Constants.SKIER_MODES.JUMP) {
       return this.jump();
     }
 
@@ -39,12 +38,14 @@ export class Skier extends Entity {
   }
 
   initJump() {
-    if (this.skiMode !== 'jump') {
-      this.directionBeforeJump = this.direction;
-      this.direction = Constants.SKIER_DIRECTIONS.JUMP;
-      this.speed = Constants.SKIER_JUMP_SPEED;
-      this.skiMode = 'jump';
+    if (this.mode === Constants.SKIER_MODES.JUMP) {
+      return;
     }
+
+    this.directionBeforeJump = this.direction;
+    this.direction = Constants.SKIER_DIRECTIONS.JUMP;
+    this.speed = Constants.SKIER_JUMP_SPEED;
+    this.mode = Constants.SKIER_MODES.JUMP;
   }
 
   setSpeed(speed = Constants.SKIER_STARTING_SPEED) {
@@ -57,8 +58,6 @@ export class Skier extends Entity {
     if (this.jumpDuration >= Constants.SKIER_MAX_JUMP_DURATION) {
       return this.stopJump();
     }
-
-    this.direction = this.direction + 1;
 
     this.chooseDirection(this.directionBeforeJump);
   }
@@ -82,14 +81,14 @@ export class Skier extends Entity {
     this.jumpDuration = 0;
 
     this.setDirection(this.directionBeforeJump);
-    this.skiMode = 'ski';
+    this.mode = Constants.SKIER_MODES.JUMP;
   }
 
   isJumping() {
     return (
       this.direction >= Constants.SKIER_DIRECTIONS.JUMP &&
       this.jumpDuration <= Constants.SKIER_MAX_JUMP_DURATION &&
-      this.skiMode === 'jump'
+      this.mode === Constants.SKIER_MODES.JUMP
     );
   }
 
@@ -156,13 +155,7 @@ export class Skier extends Entity {
   }
 
   checkIfSkierHitObstacle(obstacleManager, assetManager) {
-    const asset = assetManager.getAsset(this.assetName);
-    const skierBounds = new Rect(
-      this.x - asset.width / 2,
-      this.y - asset.height / 2,
-      this.x + asset.width / 2,
-      this.y - asset.height / 4
-    );
+    const skierBounds = this.getBounds(assetManager);
 
     const collision = obstacleManager.getObstacles().find((obstacle) => {
       const obstacleAsset = assetManager.getAsset(obstacle.getAssetName());
@@ -178,20 +171,32 @@ export class Skier extends Entity {
     });
 
     if (collision) {
-      const collisionObject = collision.getAssetName();
-      if (
-        this.skiMode === 'jump' &&
-        (collisionObject === Constants.ROCK1 ||
-          collisionObject === Constants.ROCK2)
-      ) {
+      if (this.isJumpingOverRock()) {
         return;
       }
 
-      if (collisionObject === Constants.JUMP_RAMP && this.skiMode !== 'jump') {
+      if (this.shouldBounceOnRamp(collision)) {
         return this.initJump();
       }
 
       this.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
     }
+  }
+
+  shouldBounceOnRamp(collision) {
+    const collisionObject = collision.getAssetName();
+
+    return (
+      collisionObject === Constants.JUMP_RAMP &&
+      this.mode !== Constants.SKIER_MODES.JUMP
+    );
+  }
+
+  isJumpingOverRock() {
+    return (
+      this.mode === Constants.SKIER_MODES.JUMP &&
+      (collisionObject === Constants.ROCK1 ||
+        collisionObject === Constants.ROCK2)
+    );
   }
 }

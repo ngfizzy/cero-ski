@@ -1,3 +1,5 @@
+import { Rect } from '../Core/Utils';
+
 export class Entity {
   x = 0;
   y = 0;
@@ -18,6 +20,16 @@ export class Entity {
       x: this.x,
       y: this.y,
     };
+  }
+
+  getBounds(assetManager) {
+    const asset = assetManager.getAsset(this.assetName);
+    return new Rect(
+      this.x - asset.width / 2,
+      this.y - asset.height / 2,
+      this.x + asset.width / 2,
+      this.y
+    );
   }
 
   draw(canvas, assetManager) {

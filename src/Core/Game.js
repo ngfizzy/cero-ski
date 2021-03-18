@@ -4,6 +4,7 @@ import { Canvas } from './Canvas';
 import { Skier } from '../Entities/Skier';
 import { ObstacleManager } from '../Entities/Obstacles/ObstacleManager';
 import { Rect } from './Utils';
+import { Rhino } from '../Entities/Rhino';
 
 export class Game {
   gameWindow = null;
@@ -13,6 +14,7 @@ export class Game {
 
     this.canvas = new Canvas(Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
     this.skier = new Skier(0, 0);
+    this.rhino = new Rhino(500, -500);
     this.obstacleManager = new ObstacleManager();
 
     document.addEventListener('keydown', this.handleKeyDown.bind(this));
@@ -37,18 +39,21 @@ export class Game {
 
   updateGameWindow() {
     this.skier.move();
+    this.rhino.move(this.skier.getPosition());
 
     const previousGameWindow = this.gameWindow;
     this.calculateGameWindow();
 
     this.obstacleManager.placeNewObstacle(this.gameWindow, previousGameWindow);
     this.skier.checkIfSkierHitObstacle(this.obstacleManager, this.assetManager);
+    this.rhino.checkIfRhinoCaughtSkier(this.skier, this.assetManager);
   }
 
   drawGameWindow() {
     this.canvas.setDrawOffset(this.gameWindow.left, this.gameWindow.top);
 
     this.skier.draw(this.canvas, this.assetManager);
+    this.rhino.draw(this.canvas, this.assetManager);
     this.obstacleManager.drawObstacles(this.canvas, this.assetManager);
   }
 
@@ -67,6 +72,7 @@ export class Game {
 
   handleKeyDown(event) {
     if (this.skier.direction >= Constants.SKIER_DIRECTIONS.JUMP_1) {
+      this.skier.initJump();
       return null;
     }
 

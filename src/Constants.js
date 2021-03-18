@@ -14,15 +14,46 @@ export const SKIER_JUMP_3 = 'skierJump3';
 export const SKIER_JUMP_4 = 'skierJump4';
 export const SKIER_JUMP_5 = 'skierJump5';
 
-export const TREE = 'tree';
-export const TREE_CLUSTER = 'treeCluster';
-export const ROCK1 = 'rock1';
-export const ROCK2 = 'rock2';
-
 export const SKIER_STARTING_SPEED = 10;
 export const SKIER_DIAGONAL_SPEED_REDUCER = 1.4142;
 export const SKIER_MAX_JUMP_DURATION = 150;
 export const SKIER_JUMP_SPEED = 20;
+
+export const RHINO_DEFAULT = 'rhinoDefault';
+export const RHINO_RUN_LEFT = 'rhinoRunLeft';
+export const RHINO_RUN_LEFT_2 = 'rhinoRunLeft2';
+export const RHINO_LIFT = 'rhinoLift';
+export const RHINO_LIFT_MOUTH_OPEN = 'rhinoLiftMouthOpen';
+export const RHINO_LIFT_EAT_1 = 'rhinoLiftEat1';
+export const RHINO_LIFT_EAT_2 = 'rhinoLiftEat2';
+export const RHINO_LIFT_EAT_3 = 'rhinoLiftEat3';
+export const RHINO_LIFT_EAT_4 = 'rhinoLiftEat4';
+
+export const RHINO_STARTING_SPEED = 1;
+export const RHINO_ACCELERATION = 1.005;
+export const RHINO_MAX_SPEED = 12;
+
+export const RHINO_CHASE_TIME = 10;
+export const RHINO_CHASE_ASSETS = [RHINO_RUN_LEFT, RHINO_RUN_LEFT_2];
+
+export const RHINO_EAT_TIME = 30;
+export const RHINO_EAT_ASSETS = [
+  RHINO_LIFT,
+  RHINO_LIFT_MOUTH_OPEN,
+  RHINO_LIFT_EAT_1,
+  RHINO_LIFT_EAT_2,
+  RHINO_DEFAULT,
+];
+
+export const RHINO_MODES = {
+  CHASE: 'chasing',
+  EAT: 'eating',
+};
+
+export const TREE = 'tree';
+export const TREE_CLUSTER = 'treeCluster';
+export const ROCK1 = 'rock1';
+export const ROCK2 = 'rock2';
 
 export const ASSETS = {
   [SKIER_CRASH]: 'img/skier_crash.png',
@@ -41,6 +72,17 @@ export const ASSETS = {
   [TREE_CLUSTER]: 'img/tree_cluster.png',
   [ROCK1]: 'img/rock_1.png',
   [ROCK2]: 'img/rock_2.png',
+  [ROCK1]: 'img/rock_1.png',
+  [ROCK2]: 'img/rock_2.png',
+  [RHINO_DEFAULT]: 'img/rhino_default.png',
+  [RHINO_RUN_LEFT]: 'img/rhino_run_left.png',
+  [RHINO_RUN_LEFT_2]: 'img/rhino_run_left_2.png',
+  [RHINO_LIFT]: 'img/rhino_lift.png',
+  [RHINO_LIFT_MOUTH_OPEN]: 'img/rhino_lift_mouth_open.png',
+  [RHINO_LIFT_EAT_1]: 'img/rhino_lift_eat_1.png',
+  [RHINO_LIFT_EAT_2]: 'img/rhino_lift_eat_2.png',
+  [RHINO_LIFT_EAT_3]: 'img/rhino_lift_eat_3.png',
+  [RHINO_LIFT_EAT_4]: 'img/rhino_lift_eat_4.png',
 };
 
 export const SKIER_DIRECTIONS = {
@@ -51,6 +93,11 @@ export const SKIER_DIRECTIONS = {
   RIGHT_DOWN: 4,
   RIGHT: 5,
   JUMP: 6,
+};
+
+export const SKIER_MODES = {
+  SKI: 'ski',
+  JUMP: 'jump',
 };
 
 export const SKIER_DIRECTION_ASSET = {
