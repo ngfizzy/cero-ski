@@ -186,6 +186,11 @@ export class Skier extends Entity {
       ) {
         return;
       }
+
+      if (collisionObject === Constants.JUMP_RAMP && this.skiMode !== 'jump') {
+        return this.initJump();
+      }
+
       this.setDirection(Constants.SKIER_DIRECTIONS.CRASH);
     }
   }
