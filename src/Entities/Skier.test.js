@@ -269,8 +269,7 @@ describe('Skier', () => {
       skier = new Skier(0, 0);
     });
 
-    it('can turn right', () => {
-      // skier.setDirection(Constants.SKIER_DIRECTIONS.RIGHT);
+    it('can turn down', () => {
       const setDirection = jest.spyOn(skier, 'setDirection');
 
       skier.turnDown();
