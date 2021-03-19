@@ -81,7 +81,7 @@ export class Skier extends Entity {
     this.jumpDuration = 0;
 
     this.setDirection(this.directionBeforeJump);
-    this.mode = Constants.SKIER_MODES.JUMP;
+    this.mode = Constants.SKIER_MODES.JUMPis;
   }
 
   isJumping() {
@@ -171,7 +171,7 @@ export class Skier extends Entity {
     });
 
     if (collision) {
-      if (this.isJumpingOverRock()) {
+      if (this.isJumpingOverRock(collision)) {
         return;
       }
 
@@ -192,7 +192,7 @@ export class Skier extends Entity {
     );
   }
 
-  isJumpingOverRock() {
+  isJumpingOverRock(collisionObject) {
     return (
       this.mode === Constants.SKIER_MODES.JUMP &&
       (collisionObject === Constants.ROCK1 ||
