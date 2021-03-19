@@ -195,8 +195,8 @@ export class Skier extends Entity {
   isJumpingOverRock(collisionObject) {
     return (
       this.mode === Constants.SKIER_MODES.JUMP &&
-      (collisionObject === Constants.ROCK1 ||
-        collisionObject === Constants.ROCK2)
+      (collisionObject.assetName === Constants.ROCK1 ||
+        collisionObject.assetName === Constants.ROCK2)
     );
   }
 }
