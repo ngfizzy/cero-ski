@@ -1,4 +1,17 @@
+
+
 # Ceros Ski Code Challenge
+
+This is my attempt in solving Cero Code Challenge Ski Edition.
+
+## What was accomplished
+* Initial Bug Was Fixed
+* Added some unit tests
+* Added Ability to jump over ramp was added
+* Added ability to jump on pressing letter J
+* Added ability to be chased down by letter Rhino
+
+## The challenge
 
 Welcome to the Ceros Code Challenge - Ski Edition!
 
@@ -91,3 +104,5 @@ how creative candidates get with this.
 * Write more unit tests for your code
 
 We are looking forward to see what you come up with!
+
+
